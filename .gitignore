@@ -21,3 +21,14 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+/cache/
+/reports/
+/cover-data/
+/.scannerwork
+/tmp/
+
+/bin/
+/api_includes/
+.protobuf-deps
+/api/
