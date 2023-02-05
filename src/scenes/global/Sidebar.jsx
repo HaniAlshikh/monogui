@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
+import {
+  ProSidebar,
+  Menu,
+  MenuItem,
+  SidebarHeader,
+  SidebarFooter,
+  SidebarContent,
+} from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
@@ -29,7 +36,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       onClick={() => setSelected(title)}
       icon={icon}
     >
-      <Typography>{title}</Typography>
+      <Typography variant="h3">{title}</Typography>
       <Link to={to} />
     </MenuItem>
   );
@@ -62,44 +69,39 @@ const Sidebar = () => {
       }}
     >
       <ProSidebar collapsed={isCollapsed}>
-        <Menu iconShape="square">
-          
-          {/* LOGO AND MENU ICON */}
-          <MenuItem
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
-            style={{
-              margin: "10px 0 20px 0",
-              color: colors.grey[100],
-            }}
-          >
-            {!isCollapsed && (
-              <Box>
-                <Box display="flex" justifyContent="center" alignItems="center">
-                  <img
-                    alt="profile-user"
-                    width="100px"
-                    height="100px"
-                    src={`../../assets/m8.svg`}
-                    style={{ cursor: "pointer", borderRadius: "50%" }}
-                  />
-                </Box>
-
-                <Box textAlign="center">
-                  <Typography
-                    variant="h2"
-                    color={colors.primary.dark}
-                    fontWeight="bold"
-                    sx={{ m: "10px 0 0 0" }}
-                  >
-                    Monoskope
-                  </Typography>
-                </Box>
+        <SidebarHeader>
+          {!isCollapsed && (
+            <Box>
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <img
+                  alt="profile-user"
+                  width="100px"
+                  height="100px"
+                  src={`../../assets/m8.svg`}
+                  style={{ cursor: "pointer", borderRadius: "50%" }}
+                />
               </Box>
-            )}
-          </MenuItem>
 
-          <Box paddingLeft={isCollapsed ? undefined : "10%"}>
+              <Box textAlign="center">
+                <Typography
+                  variant="h2"
+                  color={colors.primary.dark}
+                  fontWeight="bold"
+                  sx={{ m: "10px 0 0 0" }}
+                >
+                  Monoskope
+                </Typography>
+              </Box>
+            </Box>
+          )}
+        </SidebarHeader>
+
+        <SidebarContent style={{
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
+          <Menu iconShape="square">
             <Item
               title="Audit"
               to="/audit"
@@ -107,12 +109,14 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-          </Box>
+          </Menu>
+        </SidebarContent>
 
+        <SidebarFooter>
           <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
             <MenuOutlinedIcon />
           </IconButton>
-        </Menu>
+        </SidebarFooter>
       </ProSidebar>
     </Box>
   );

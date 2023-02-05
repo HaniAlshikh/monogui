@@ -22,7 +22,7 @@
     "@mui/material": "^5.10.5",
     "yup": "^0.32.11",
     "react-router-dom": "^6.3.0",
-    "react-pro-sidebar": "^0.7.1",
+    "react-pro-sidebar": "==0.7.1",
     "formik": "^2.2.9"
   },
   "scripts": {
