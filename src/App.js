@@ -5,18 +5,18 @@ import Sidebar from "./scenes/global/Sidebar";
 import Audit from "./scenes/audit";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
+import { useProSidebar } from "react-pro-sidebar";
 
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
-
 
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="app">
-          <Sidebar isSidebar={isSidebar} />
+          <Sidebar />
           <main className="content">
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>

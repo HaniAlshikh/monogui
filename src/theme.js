@@ -99,30 +99,30 @@ export const themeSettings = (mode) => {
           }),
     },
     typography: {
-      fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
+      fontFamily: "Roboto,sans-serif",
       fontSize: 13,
       h1: {
-        fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
+        fontFamily: "Roboto,sans-serif",
         fontSize: 34,
       },
       h2: {
-        fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
+        fontFamily: "Roboto,sans-serif",
         fontSize: 28,
       },
       h3: {
-        fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
+        fontFamily: "Roboto,sans-serif",
         fontSize: 23,
       },
       h4: {
-        fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
+        fontFamily: "Roboto,sans-serif",
         fontSize: 19,
       },
       h5: {
-        fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
+        fontFamily: "Roboto,sans-serif",
         fontSize: 16,
       },
       h6: {
-        fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
+        fontFamily: "Roboto,sans-serif",
         fontSize: 13,
       },
     },

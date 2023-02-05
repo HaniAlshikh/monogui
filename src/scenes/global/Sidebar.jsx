@@ -1,87 +1,77 @@
 import { useState } from "react";
 import {
-  ProSidebar,
+  Sidebar,
   Menu,
   MenuItem,
-  SidebarHeader,
-  SidebarFooter,
-  SidebarContent,
+  menuClasses,
+  useProSidebar,
 } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
-import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
-import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
+import KeyboardArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardArrowLeftOutlined";
 
-const Item = ({ title, to, icon, selected, setSelected }) => {
+const Layout = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  return (
-    <MenuItem
-      active={selected === title}
-      style={{
-        color: colors.grey[100],
-      }}
-      onClick={() => setSelected(title)}
-      icon={icon}
-    >
-      <Typography variant="h3">{title}</Typography>
-      <Link to={to} />
-    </MenuItem>
-  );
-};
-
-const Sidebar = () => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Audit");
+  const { collapseSidebar, toggleSidebar, collapsed, toggled, broken, rtl } =
+    useProSidebar();
+
+  const menuItemStyles = {
+    root: {
+      color: colors.grey[80],
+    },
+    icon: {
+      [`&.${menuClasses.active}`]: {
+        color: colors.primary.dark,
+      },
+    },
+    button: {
+      [`&.${menuClasses.active}`]: {
+        color: colors.primary.dark,
+        boxSizing: "borderBox",
+        borderRight: ".4em solid",
+        borderRightColor: colors.primary.dark,
+      },
+      "&:hover": {
+        color: colors.primary.dark,
+        background: "transparent",
+      },
+    },
+  };
 
   return (
-    <Box
-      sx={{
-        "& .pro-sidebar-inner": {
-          background: `${theme.palette.background.default} !important`,
-        },
-        "& .pro-icon-wrapper": {
-          backgroundColor: "transparent !important",
-        },
-        "& .pro-inner-item": {
-          padding: "5px 35px 5px 20px !important",
-        },
-        "& .pro-inner-item:hover": {
-          color: "#868dfb !important",
-        },
-        "& .pro-menu-item.active": {
-          color: "#6870fa !important",
-        },
+    <Sidebar
+      backgroundColor={theme.palette.background.default}
+      rootStyles={{
+        color: colors.grey[80],
+        borderRightColor: colors.grey[94],
       }}
     >
-      <ProSidebar collapsed={isCollapsed}>
-        <SidebarHeader>
-          {!isCollapsed && (
-            <Box>
-              <Box display="flex" justifyContent="center" alignItems="center">
-                <img
-                  alt="profile-user"
-                  width="100px"
-                  height="100px"
-                  src={`../../assets/m8.svg`}
-                  style={{ cursor: "pointer", borderRadius: "50%" }}
-                />
-              </Box>
-
+      <Box
+        display="flex"
+        flexDirection="column"
+        height="100%"
+        alignItems="left"
+      >
+        <Box flex="1" sx={{ m: collapsed ? 2 : 5 }}>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            flexDirection="column"
+          >
+            <img
+              alt="profile-user"
+              width={collapsed ? "100%" : "60%"}
+              src={`../../assets/m8.svg`}
+              style={{ cursor: "pointer" }}
+            />
+            {!collapsed && (
               <Box textAlign="center">
                 <Typography
                   variant="h2"
@@ -92,16 +82,43 @@ const Sidebar = () => {
                   Monoskope
                 </Typography>
               </Box>
-            </Box>
-          )}
-        </SidebarHeader>
+            )}
+          </Box>
+        </Box>
 
-        <SidebarContent style={{
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}>
-          <Menu iconShape="square">
+        <Box
+          flex="1"
+          // sx={{ mt: 15 }}
+          // display="flex"
+          // justifyContent="center"
+          // flexDirection="column"
+          // alignItem="stretch"
+        >
+          <Menu iconShape="square" menuItemStyles={menuItemStyles}>
+            <Item
+              title="Dashboard"
+              to="/dashboard"
+              icon={<HomeOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Clusters"
+              to="/clusters"
+              icon={<HomeOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Users"
+              to="/users"
+              icon={<HomeOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
             <Item
               title="Audit"
               to="/audit"
@@ -110,16 +127,58 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
           </Menu>
-        </SidebarContent>
+        </Box>
 
-        <SidebarFooter>
-          <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-            <MenuOutlinedIcon />
-          </IconButton>
-        </SidebarFooter>
-      </ProSidebar>
+        <Box
+          flex="1"
+          display="flex"
+          height="100%"
+          // justifyContent="center"
+          alignItems="flex-end"
+        >
+          <Menu menuItemStyles={menuItemStyles}>
+            <MenuItem
+              onClick={() => collapseSidebar()}
+              icon={
+                collapsed ? (
+                  <KeyboardArrowRightOutlinedIcon />
+                ) : (
+                  <KeyboardArrowLeftOutlinedIcon />
+                )
+              }
+            ></MenuItem>
+          </Menu>
+
+          {/* <IconButton onClick={() => collapseSidebar()} color={colors.grey[80]}>
+          {collapsed ? (
+              <KeyboardArrowRightOutlinedIcon />
+            ) : (
+              <KeyboardArrowLeftOutlinedIcon />
+            )}
+          </IconButton> */}
+        </Box>
+      </Box>
+    </Sidebar>
+  );
+};
+
+const Item = ({ title, to, icon, selected, setSelected }) => {
+  const theme = useTheme();
+  const active = selected === title;
+  return (
+    <Box sx={{ py: 3 }}>
+      <MenuItem
+        active={active}
+        onClick={() => setSelected(title)}
+        icon={icon}
+        component={<Link to={to} />}
+      >
+        <Typography variant="h3" fontWeight={active ? 700 : 400}>
+          {title}
+        </Typography>
+      </MenuItem>
     </Box>
   );
 };
 
-export default Sidebar;
+export default Layout;
