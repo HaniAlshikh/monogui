@@ -1,0 +1,1 @@
+// this is a work around since the generated stubs depends on it and can't be skipped (for now)

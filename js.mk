@@ -1,7 +1,4 @@
-BUILD_PATH ?= $(shell pwd)
-
 CURL ?= curl
-export M8GUI_OPERATION_MODE = development
 
 ##@ Javascript
 .PHONY: js-protobuf
@@ -10,7 +7,7 @@ js-protobuf: .protobuf-deps ## Generate neccessery client stubs
 	mkdir -p ./src/api
 	$(CURL) -fL -o m8.tar.gz "https://github.com/finleap-connect/monoskope/archive/refs/tags/v$(M8_VERSION).tar.gz"
 	tar -xf m8.tar.gz --strip-components=1 "monoskope-$(M8_VERSION)/api"
-	export PATH="$(LOCALBIN):$$PATH" ; find ./api -name '*.proto' -exec $(PROTOC) -I. -I$(PROTOC_IMPORTS_DIR) --js_out=import_style=commonjs:./src --grpc-web_out=import_style=typescript,mode=grpcwebtext:./src {} \;
+	export PATH="$(LOCALBIN):$$PATH" ; find ./api -name '*.proto' -exec $(PROTOC) -I. -I$(PROTOC_IMPORTS_DIR) --js_out=import_style=commonjs:./src --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./src {} \;
 	rm -rf m8.tar.gz
 
 ##@ Build Dependencies

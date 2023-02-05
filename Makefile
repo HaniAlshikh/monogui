@@ -1,10 +1,12 @@
 SHELL := bash
 
-YQ ?= yq
+BUILD_PATH ?= $(shell pwd)
 
 VERSION ?= 0.0.1-local
 LATEST_REV = $(shell git rev-list --tags --max-count=1 2>/dev/null)
 LATEST_TAG = $(shell git describe --tags $(LATEST_REV) 2>/dev/null)
+
+export M8GUI_OPERATION_MODE = development
 M8_VERSION ?= 0.5.2
 
 ##@ General
@@ -25,6 +27,11 @@ help: ## Display this help.
 
 show-latest-tag: ## Echos the latest tag
 	@echo "Latest tag is $(LATEST_TAG)"
-	
+
+.PHONY: clean
+clean: ## Clean up build dependencies
+	rm -R $(LOCALBIN)
+
 export
+include react.mk
 include js.mk
