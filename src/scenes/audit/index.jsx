@@ -11,7 +11,7 @@ const Audit = () => {
     const [to, setTo] = useState(new Date(now.getFullYear(), now.getMonth() + 1, 0));
     const [data, setData] = useState([])
 
-    useEffect(() => updateTable(from, to, setData), [])
+    useEffect(() => updateTable(from, to, setData), [from, to])
 
     const columns = [
         {field: "timestamp", headerName: "Timestamp"},
