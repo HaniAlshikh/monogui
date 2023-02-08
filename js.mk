@@ -7,7 +7,7 @@ js-protobuf: .protobuf-deps ## Generate neccessery client stubs
 	mkdir -p ./src/api
 	$(CURL) -fL -o m8.tar.gz "https://github.com/finleap-connect/monoskope/archive/refs/tags/v$(M8_VERSION).tar.gz"
 	tar -xf m8.tar.gz --strip-components=1 "monoskope-$(M8_VERSION)/api"
-	export PATH="$(LOCALBIN):$$PATH" ; find ./api -name '*.proto' -exec $(PROTOC) -I. -I$(PROTOC_IMPORTS_DIR) --js_out=import_style=commonjs:./src --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./src {} \;
+	export PATH="$(LOCALBIN):$$PATH" ; find ./api -name '*.proto' -exec $(PROTOC) -I. -I$(PROTOC_IMPORTS_DIR) --js_out=import_style=commonjs:./src --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:./src {} \;
 	rm -rf m8.tar.gz
 
 ##@ Build Dependencies
@@ -16,10 +16,6 @@ js-protobuf: .protobuf-deps ## Generate neccessery client stubs
 LOCALBIN ?= $(shell pwd)/bin
 $(LOCALBIN):
 	mkdir -p $(LOCALBIN)
-
-.PHONY: clean
-clean: ## Clean up build dependencies
-	rm -R $(LOCALBIN)
 
 ## Tool Binaries
 PROTOC ?= $(LOCALBIN)/protoc
