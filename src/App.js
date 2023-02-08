@@ -1,32 +1,29 @@
-import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
 import Audit from "./scenes/audit";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import { ColorModeContext, useMode } from "./theme";
-import { useProSidebar } from "react-pro-sidebar";
+import {CssBaseline, ThemeProvider} from "@mui/material";
+import {ColorModeContext, useMode} from "./theme";
 
 function App() {
-  const [theme, colorMode] = useMode();
-  const [isSidebar, setIsSidebar] = useState(true);
+    const [theme, colorMode] = useMode();
 
-  return (
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <div className="app">
-          <Sidebar />
-          <main className="content">
-            <Topbar setIsSidebar={setIsSidebar} />
-            <Routes>
-              <Route path="/audit" element={<Audit />} />
-            </Routes>
-          </main>
-        </div>
-      </ThemeProvider>
-    </ColorModeContext.Provider>
-  );
+    return (
+        <ColorModeContext.Provider value={colorMode}>
+            <ThemeProvider theme={theme}>
+                <CssBaseline/>
+                <div className="app">
+                    <Sidebar/>
+                    <main className="content">
+                        <Topbar/>
+                        <Routes>
+                            <Route path="/audit" element={<Audit/>}/>
+                        </Routes>
+                    </main>
+                </div>
+            </ThemeProvider>
+        </ColorModeContext.Provider>
+    );
 }
 
 export default App;

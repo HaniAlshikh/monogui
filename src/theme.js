@@ -103,19 +103,19 @@ export const themeSettings = (mode) => {
       fontSize: 13,
       h1: {
         fontFamily: "Roboto,sans-serif",
-        fontSize: 34,
+        fontSize: 40,
       },
       h2: {
         fontFamily: "Roboto,sans-serif",
-        fontSize: 28,
+        fontSize: 32,
       },
       h3: {
         fontFamily: "Roboto,sans-serif",
-        fontSize: 23,
+        fontSize: 24,
       },
       h4: {
         fontFamily: "Roboto,sans-serif",
-        fontSize: 19,
+        fontSize: 20,
       },
       h5: {
         fontFamily: "Roboto,sans-serif",
@@ -123,7 +123,7 @@ export const themeSettings = (mode) => {
       },
       h6: {
         fontFamily: "Roboto,sans-serif",
-        fontSize: 13,
+        fontSize: 14,
       },
     },
   };
