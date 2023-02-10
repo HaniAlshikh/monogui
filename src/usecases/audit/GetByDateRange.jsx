@@ -15,8 +15,8 @@ class AuthInterceptor {
     }
 }
 
-const GetByDateRange = (from: Date, to: Date) => {
-    const token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjRmZjU1NmUxN2M2NTRjOTMzOGYyYzEzNmVmZDMzYTQzOTQ4NDNmMDFmNTEzMTJiN2NiMmZkMGU2N2U2NzVmOTciLCJ0eXAiOiJKV1QifQ.eyJhdWQiOlsibThhcGkiXSwiZW1haWwiOiJhZG1pbkBtb25vc2tvcGUuZGV2IiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImV4cCI6MTY3NTg5MDA1OCwiaWF0IjoxNjc1ODQ2ODU4LCJpc19hcGlfdG9rZW4iOmZhbHNlLCJpc3MiOiJodHRwczovL2FwaS5tb25vc2tvcGUuZGV2IiwianRpIjoiNTg1OGI0YTAtZTI4NC00ZDQwLWIzN2ItZjYzNGVkMGVmODdjIiwibmFtZSI6ImFkbWluIiwibmJmIjoxNjc1ODQ2ODU4LCJzY29wZSI6IkFQSSIsInN1YiI6IjhhYjQxMzRmLTUwMmEtNDFiNi05YWMzLTRjN2YwY2Y1ZDIxNiJ9.UQdutcx2Xbl8fA9V_F85CHFRomfDr96FNf0jZAIBJuj9y6kgxN8JLEz6BBOcN-f_NH0mmoS_5Oom27ZZRfiWsK9yNqzP-PD35NlQWJNaLG1zfjbPc-yUqxLPpf0nREu9Rp2puXEDjPtx1ZRsdmiLetJ0NNk8ulutEuQPaexfCEBn5nesqZpHReqJUnBfRoQDoKNKWm4Dkn26u1quZZiSbG4LpPSl0Bnw7NYSZxfFhSb_t8nt531QxNFAFCwqRKiA6DcPimqzn__-tesVl9WzqxP1l8yPvY2fMhDcdJ4I0x4PYUw7bnHyX7lEZcZGMq9LPhDsX8EQtacTtiP7sL0GuQ"
+const GetByDateRange = (ctx, from: Date, to: Date) => {
+    const token = ctx.accessToken
     const authInterceptor = new AuthInterceptor(token)
     const options = {
         unaryInterceptors: [authInterceptor],

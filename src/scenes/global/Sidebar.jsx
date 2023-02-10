@@ -9,6 +9,7 @@ import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
 import KeyboardArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardArrowLeftOutlined";
+import logo from "../../assets/m8.svg";
 
 const Layout = () => {
     const theme = useTheme();
@@ -63,7 +64,7 @@ const Layout = () => {
                         <img
                             alt="m8-logo"
                             width={collapsed ? "100%" : "60%"}
-                            src={`../../assets/m8.svg`}
+                            src={logo}
                             style={{cursor: "pointer"}}
                         />
                         {!collapsed && (

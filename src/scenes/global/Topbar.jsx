@@ -4,8 +4,10 @@ import { ColorModeContext, tokens } from "../../theme";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import AuthContext from "../auth/AuthContext";
 
 const Topbar = () => {
+  const authCtx = useContext(AuthContext)
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
@@ -22,11 +24,13 @@ const Topbar = () => {
       {/* WELCOME */}
       <Box display="flex">
         <Typography variant="h6" color={colors.grey[40]}>
-          Logged in as{" "}
+          Logged in as {
+          <Typography color={colors.grey[40]} fontWeight="bold">
+            {authCtx.username}
+          </Typography>
+        }
         </Typography>
-        <Typography color={colors.grey[40]} fontWeight="bold">
-          TODO
-        </Typography>
+
       </Box>
 
       {/* ICONS */}

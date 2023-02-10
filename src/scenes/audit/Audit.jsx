@@ -1,17 +1,19 @@
 import {Box} from "@mui/material";
 import Header from "../../components/global/Header";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import GetByDateRange from "../../usecases/audit/GetByDateRange";
 import {DataGrid} from "@mui/x-data-grid";
 import AuditDatePicker from "../../components/audit/AuditDatePicker";
+import AuthContext from "../auth/AuthContext";
 
 const Audit = () => {
+    const authCtx = useContext(AuthContext)
     const now = new Date();
     const [from, setFrom] = useState(new Date(now.getFullYear(), now.getMonth(), 1));
     const [to, setTo] = useState(new Date(now.getFullYear(), now.getMonth() + 1, 0));
     const [data, setData] = useState([])
 
-    useEffect(() => updateTable(from, to, setData), [from, to])
+    useEffect(() => updateTable(authCtx, from, to, setData), [from, to])
 
     const columns = [
         {field: "timestamp", headerName: "Timestamp"},
@@ -28,13 +30,13 @@ const Audit = () => {
             onChangeFrom={(newFrom) => {
                 let nf = newFrom.$d
                 setFrom(nf)
-                updateTable(nf, to, setData)
+                updateTable(authCtx, nf, to, setData)
             }}
             to={to}
             onChangeTo={(newTo) => {
                 let nt = newTo.$d
                 setTo(nt)
-                updateTable(from, nt, setData)
+                updateTable(authCtx, from, nt, setData)
             }}
         />
         <Box mt={4} height="65vh">
@@ -43,8 +45,8 @@ const Audit = () => {
     </Box>
 }
 
-const updateTable = (from, to, setData) => {
-    const dataStream = GetByDateRange(from, to)
+const updateTable = (ctx, from, to, setData) => {
+    const dataStream = GetByDateRange(ctx, from, to)
     const d = []
     setData([...d])
     dataStream.on('data', function (response) {
