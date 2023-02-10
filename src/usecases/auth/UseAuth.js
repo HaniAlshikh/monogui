@@ -86,7 +86,7 @@ const useAuth = (props: Oauth2Props) => {
                         payload = {
                             "username": res.getUsername(),
                             "accessToken": res.getAccessToken(),
-                            "expiry": res.getExpiry().toDate()
+                            "expiry": res.getExpiry().getSeconds(),
                         }
                     })
                     setUI({

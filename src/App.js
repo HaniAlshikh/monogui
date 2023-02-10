@@ -104,15 +104,10 @@ function App() {
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
                 <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            authCtx.isLoggedIn ? (
-                                <Navigate to="/audit"/>
-                            ) : (
-                                <Auth redirectUri={config.redirect_uri}/>
-                            )
-                        }
+                    <Route path="/" element={
+                        authCtx.isLoggedIn ?
+                            <Navigate to="/audit"/> :
+                            <Auth redirectUri={config.redirect_uri}/>}
                     />
                     <Route path="/auth/callback" element={<AuthPopup/>}/>
                     <Route path="*" element={<Navigate to="/"/>}/>
@@ -120,25 +115,6 @@ function App() {
                         <Route path="/audit" element={<Content><Audit/></Content>}/>
                     </Route>
                 </Routes>
-                {/*{!authCtx.isLoggedIn &&*/}
-                {/*    <Routes>*/}
-                {/*        <Route path="/" element={<Auth redirectUri={config.redirect_uri} />} />*/}
-                {/*        <Route path="/auth/callback" element={<AuthPopup />} />*/}
-                {/*        <Route path='*' element={<Navigate to='/' />} />*/}
-                {/*    </Routes>*/}
-                {/*}*/}
-                {/*{!authCtx.isLoggedIn &&*/}
-                {/*    <div className="app">*/}
-                {/*        <Sidebar/>*/}
-                {/*        <main className="content">*/}
-                {/*            <Topbar/>*/}
-                {/*            <Routes>*/}
-                {/*                <Route path="/" element={<Navigate to='/audit' />} />*/}
-                {/*                <Route path="/audit" element={<Audit />} />*/}
-                {/*            </Routes>*/}
-                {/*        </main>*/}
-                {/*    </div>*/}
-                {/*}*/}
             </ThemeProvider>
         </ColorModeContext.Provider>
     );

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 
 const M8_AUTH_INFO_KEY = 'm8-user-auth-info';
 
@@ -7,21 +7,26 @@ const AuthContext = React.createContext({
     accessToken: "",
     expiry: null,
     isLoggedIn: false,
-    login: (authInfo) => {},
-    logout: () => {},
+    login: (authInfo) => {
+    },
+    logout: () => {
+    },
 })
 
 const getTimeToExpiration = (expire: number) => {
-    const current = new Date().getUTCSeconds()
+    const current = new Date().getTime() / 1000
+    console.log(`calculating access token expiration: ${expire} - ${current}`)
     return expire - current // in seconds
 }
 
-const authInfo = {}
-
 export const AuthContextProvider = (props) => {
-    // let authInfo = localStorage.getItem(AUTH_STATE_KEY)
-    // if (getTimeToExpiration(authInfo?.expiry.getUTCSeconds()) <= 0)
-    //     authInfo = null
+    let authInfo = JSON.parse(localStorage.getItem(M8_AUTH_INFO_KEY))
+    const remainingToExpire = getTimeToExpiration(authInfo?.expiry || 0)
+    console.log(`remaining for token to expire: ${remainingToExpire}`)
+    if (remainingToExpire <= 0) {
+        authInfo = null
+    }
+    
     const [userName, setUserName] = useState(authInfo?.username)
     const [accessToken, setAccessToken] = useState(authInfo?.accessToken)
     const [expiry, setExpiry] = useState(authInfo?.expiry)
