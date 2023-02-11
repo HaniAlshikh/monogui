@@ -1,10 +1,9 @@
 import {Box, IconButton, Typography, useTheme} from "@mui/material";
 import {useContext} from "react";
 import {ColorModeContext, tokens} from "../../theme";
-import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import AuthContext from "../../scenes/auth/AuthContext";
+import ThemeButton from "./ThemeButton";
 
 const Topbar = () => {
     const authCtx = useContext(AuthContext)
@@ -27,7 +26,7 @@ const Topbar = () => {
                     {"Logged in as "}
                 </Typography>
                 &nbsp;
-                <Typography display="inline" variant="h5" color={colors.grey[40]} fontWeight="bold"
+                <Typography display="inline" variant="h5" color={colors.grey[40]}
                             textTransform="capitalize">
                     {` ${authCtx.username}`}
                 </Typography>
@@ -35,13 +34,7 @@ const Topbar = () => {
 
             {/* ICONS */}
             <Box display="flex">
-                <IconButton onClick={colorMode.toggleColorMode}>
-                    {theme.palette.mode === "dark" ? (
-                        <DarkModeOutlinedIcon/>
-                    ) : (
-                        <LightModeOutlinedIcon/>
-                    )}
-                </IconButton>
+                <ThemeButton/>
                 <IconButton onClick={authCtx.logout}>
                     <LogoutOutlinedIcon/>
                 </IconButton>

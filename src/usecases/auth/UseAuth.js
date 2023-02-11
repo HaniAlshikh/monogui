@@ -35,9 +35,9 @@ const cleanup = (
     popupRef: React.MutableRefObject<Window | null | undefined>,
     handleMessageListener: any
 ) => {
-    clearInterval(intervalRef.current);
+    clearInterval(intervalRef?.current);
     closePopup(popupRef);
-    // removeState();
+    removeState();
     window.removeEventListener('message', handleMessageListener);
 };
 
@@ -58,7 +58,7 @@ const useAuth = (props: Oauth2Props) => {
             error: null,
         });
 
-        let r = M8Auth(props)
+        let r = M8Auth(redirectUri)
         r.then((res) => {
             saveState(res.getState());
             // 3. Open popup
@@ -112,27 +112,19 @@ const useAuth = (props: Oauth2Props) => {
         intervalRef.current = setInterval(() => {
             const popupClosed = !popupRef.current?.window || popupRef.current?.window?.closed;
             if (popupClosed) {
+                console.warn('Popup was closed before completing authentication.');
                 setUI((ui) => ({
-                    ...ui,
+                    error: ui?.error || "Please wait for the authentication flow to finish. You will be automatically redirected.",
                     loading: false,
                 }));
-                console.warn('Warning: Popup was closed before completing authentication.');
-                clearInterval(intervalRef.current);
-                removeState();
-                window.removeEventListener('message', handleMessageListener);
+                cleanup(intervalRef, popupRef, handleMessageListener);
             }
         }, 250);
 
         return () => {
-            window.removeEventListener('message', handleMessageListener);
-            if (intervalRef.current) clearInterval(intervalRef.current);
+            cleanup(intervalRef, null, handleMessageListener())
         };
-    }, [
-        redirectUri,
-        onSuccess,
-        onError,
-        setUI,
-    ]);
+    }, [redirectUri, onSuccess, onError, setUI]);
 
     return {loading, error, getAuth};
 };

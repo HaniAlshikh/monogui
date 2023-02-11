@@ -1,6 +1,9 @@
 import {useEffect} from 'react';
 import {queryToObject} from "../../util/window";
-import {Box} from "@mui/material";
+import {Box, Typography, useTheme} from "@mui/material";
+import loader from "../../assets/loader.svg";
+import {tokens} from "../../theme";
+import {useNavigate} from "react-router-dom";
 
 const POPUP_HEIGHT = 700;
 const POPUP_WIDTH = 600;
@@ -14,6 +17,10 @@ const checkState = (receivedState: string) => {
 };
 
 const AuthPopup = () => {
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+    const navigate = useNavigate()
+
     // On mount
     useEffect(() => {
         const payload = {
@@ -24,7 +31,10 @@ const AuthPopup = () => {
         const error = payload?.error;
 
         if (!window.opener) {
-            throw new Error('No window opener');
+            navigate('/')
+            console.error('Not a callback call');
+            return
+            // throw new Error('No window opener');
         }
 
         if (error) {
@@ -45,8 +55,15 @@ const AuthPopup = () => {
         }
     }, []);
 
-    return <Box>
-        Authenticating...
+    return <Box display="flex" height={"100%"} wedith={"100%"}
+                justifyContent="center"
+                alignItems="center">
+        <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+            <Box component="img" sx={{pb: 2, maxWidth: "50%"}} alt="loader" src={loader}/>
+            <Typography variant="h4" color={colors.blueAccent.default}>
+                Authenticating...
+            </Typography>
+        </Box>
     </Box>
 };
 
