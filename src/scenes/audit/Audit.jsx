@@ -1,81 +1,60 @@
 import {Box} from "@mui/material";
 import Header from "../../components/global/Header";
 import {useContext, useEffect, useState} from "react";
-import GetByDateRange from "../../usecases/audit/GetByDateRange";
-import {DataGrid} from "@mui/x-data-grid";
+import GetAuditLogUseCase from "../../usecases/audit/GetByDateRange";
 import AuditDatePicker from "../../components/audit/AuditDatePicker";
 import AuthContext from "../auth/AuthContext";
+import {DataGrid} from "@mui/x-data-grid";
+
+const getAuditLogUseCase = new GetAuditLogUseCase()
+
+const columns = [
+    {field: "timestamp", headerName: "Timestamp", width: 190},
+    {field: "issuer", headerName: "Issuer", width: 200},
+    {field: "issuerId", headerName: "issuerId", width: 200}, // width: "max-content"},
+    {field: "eventType", headerName: "eventType", width: 150},
+    {field: "details", headerName: "details", flex: 1},
+];
 
 const Audit = () => {
-    const authCtx = useContext(AuthContext)
+    const ctx = useContext(AuthContext)
     const now = new Date();
     const [from, setFrom] = useState(new Date(now.getFullYear(), now.getMonth(), 1));
     const [to, setTo] = useState(new Date(now.getFullYear(), now.getMonth() + 1, 0));
     const [data, setData] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
+    getAuditLogUseCase.auditLogOptions.minTime = from
+    getAuditLogUseCase.auditLogOptions.maxTime = to
 
-    useEffect(() => updateTable(authCtx, from, to, setData), [from, to])
-
-    const columns = [
-        {field: "timestamp", headerName: "Timestamp"},
-        {field: "issuer", headerName: "Issuer"},
-        {field: "issuerId", headerName: "issuerId"}, // width: "max-content"},
-        {field: "eventType", headerName: "eventType"},
-        {field: "details", headerName: "details", flex: 1},
-    ];
+    useEffect(() => {
+        return () => updateTable(ctx, setData, setIsLoading)
+    }, [ctx, from, to])
 
     return <Box m={3}>
         <Header title="Audit log" subtitle="Get audit log within the specified data-range"/>
         <AuditDatePicker
             from={from}
             onChangeFrom={(newFrom) => {
-                let nf = newFrom.$d
-                setFrom(nf)
-                updateTable(authCtx, nf, to, setData)
+                setFrom(newFrom.$d)
+                updateTable(ctx, setData, setIsLoading)
             }}
             to={to}
             onChangeTo={(newTo) => {
-                let nt = newTo.$d
-                setTo(nt)
-                updateTable(authCtx, from, nt, setData)
+                setTo(newTo.$d)
+                updateTable(ctx, setData, setIsLoading)
             }}
         />
-        <Box mt={4} height="65vh">
-            <DataGrid getRowId={(row) => row.key} checkboxSelection rows={data} columns={columns}/>
+        <Box mt={4} height="70vh">
+            <DataGrid loading={isLoading} autoPageSize getRowId={(row) => row.key} rows={data}
+                      columns={columns}/>
         </Box>
     </Box>
 }
 
-const updateTable = (ctx, from, to, setData) => {
-    const dataStream = GetByDateRange(ctx, from, to)
-    const d = []
-    setData([...d])
-    dataStream.on('data', function (response) {
-        if (response === "EOF") {
-            dataStream.cancel()
-            return
-        }
-        const e = {
-            key: response.getTimestamp().getSeconds() + response.getTimestamp().getNanos(),
-            timestamp: response.getTimestamp().toDate(),
-            issuer: response.getIssuer(),
-            issuerId: response.getIssuerId(),
-            eventType: response.getEventType(),
-            details: response.getDetails(),
-        }
-        d.push(e)
-        setData([...d])
-        // setData(old => [e, ...old])
-    });
-    dataStream.on('status', function (status) {
-        console.log(status.code);
-        console.log(status.details);
-        console.log(status.metadata);
-        status.code === 0 && dataStream.cancel()
-    });
-    dataStream.on('end', function (end) {
-        // stream end signal
-        dataStream.cancel()
-    });
+const updateTable = (ctx, setData, setIsLoading) => {
+    setIsLoading(true)
+    setData(getAuditLogUseCase.run(ctx))
+    setIsLoading(false)
 }
 
 export default Audit;

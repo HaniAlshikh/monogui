@@ -1,15 +1,16 @@
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import {DatePicker} from '@mui/x-date-pickers-pro';
-import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
+import {DatePicker} from "@mui/x-date-pickers";
 
 export default function AuditDatePicker(props) {
     return (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Box display="flex">
                 <Box mr={4}>
                     <DatePicker
+                        inputFormat="yyyy-MM-dd"
                         label="from"
                         value={props.from}
                         onChange={(newValue) => {
@@ -22,6 +23,7 @@ export default function AuditDatePicker(props) {
 
                 <Box>
                     <DatePicker
+                        inputFormat="yyyy-MM-dd"
                         label="to"
                         value={props.to}
                         onChange={(newValue) => {

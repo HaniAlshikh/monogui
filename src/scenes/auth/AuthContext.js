@@ -3,6 +3,7 @@ import React, {useState} from 'react'
 const M8_AUTH_INFO_KEY = 'm8-user-auth-info';
 
 const AuthContext = React.createContext({
+    hostname: "",
     username: "",
     accessToken: "",
     expiry: null,
@@ -26,7 +27,7 @@ export const AuthContextProvider = (props) => {
     if (remainingToExpire <= 0) {
         authInfo = null
     }
-    
+
     const [userName, setUserName] = useState(authInfo?.username)
     const [accessToken, setAccessToken] = useState(authInfo?.accessToken)
     const [expiry, setExpiry] = useState(authInfo?.expiry)
@@ -48,6 +49,7 @@ export const AuthContextProvider = (props) => {
     }
 
     const contextValue = {
+        hostname: "https://api.monoskope.dev:8443", // TODO config
         username: userName,
         accessToken: accessToken,
         expiry: expiry,

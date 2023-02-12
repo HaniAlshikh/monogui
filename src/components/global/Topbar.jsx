@@ -1,6 +1,6 @@
 import {Box, IconButton, Typography, useTheme} from "@mui/material";
 import {useContext} from "react";
-import {ColorModeContext, tokens} from "../../theme";
+import {tokens} from "../../theme";
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import AuthContext from "../../scenes/auth/AuthContext";
 import ThemeButton from "./ThemeButton";
@@ -9,7 +9,6 @@ const Topbar = () => {
     const authCtx = useContext(AuthContext)
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const colorMode = useContext(ColorModeContext);
 
     return (
         <Box

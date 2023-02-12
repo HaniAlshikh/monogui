@@ -9,9 +9,11 @@ export const tokens = (mode) => ({
                 white: "#1d2628",
                 98: "#1d2729",
                 94: "#263336",
-                80: "#546f75",
+                80: "#415a60",
+                60: "#5d7d86",
                 40: "#81acb5",
                 black: "#fafafa",
+                background: "#1d2628",
             },
             primary: {
                 lighter: "#424e51",
@@ -40,8 +42,10 @@ export const tokens = (mode) => ({
                 98: "#fafafa",
                 94: "#f0f0f0",
                 80: "#cccccc",
+                60: "#969696",
                 40: "#666666",
                 black: "#000000",
+                background: "#fafafa",
             },
             primary: {
                 lighter: "#c2fbff",
@@ -158,6 +162,47 @@ export const themeSettings = (mode) => {
             h6: {
                 fontFamily: "Roboto,sans-serif",
                 fontSize: 14,
+            },
+        },
+        components: {
+            MuiCssBaseline: {
+                styleOverrides: {
+                    body: {
+                        scrollbarColor: "pink yellow",
+                        "&::-webkit-scrollbar-track, & *::-webkit-scrollbar-track": {
+                            background: colors.grey.background,
+                        },
+                        "&::-webkit-scrollbar, & *::-webkit-scrollbar": {
+                            backgroundColor: "red",
+                        },
+                        "&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb": {
+                            borderRadius: 16,
+                            backgroundColor: colors.grey[80],
+                            minHeight: 16,
+                            border: `3px solid ${colors.grey.background}`,
+                        },
+                        "&::-webkit-scrollbar-thumb:focus, & *::-webkit-scrollbar-thumb:focus": {
+                            backgroundColor: colors.grey[60],
+                        },
+                        "&::-webkit-scrollbar-thumb:active, & *::-webkit-scrollbar-thumb:active": {
+                            backgroundColor: colors.grey[60],
+                        },
+                        "&::-webkit-scrollbar-thumb:hover, & *::-webkit-scrollbar-thumb:hover": {
+                            backgroundColor: colors.grey[60],
+                        },
+                        "&::-webkit-scrollbar-corner, & *::-webkit-scrollbar-corner": {
+                            backgroundColor: colors.grey[60],
+                        },
+                    },
+                },
+            },
+            MuiPaper: {
+                styleOverrides: {
+                    root: {
+                        backgroundColor: colors.grey[98],
+                        backgroundImage: "none",
+                    },
+                },
             },
         },
     };
