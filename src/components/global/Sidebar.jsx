@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {Menu, menuClasses, MenuItem, Sidebar, useProSidebar,} from "react-pro-sidebar";
-import {Box, Typography, useTheme} from "@mui/material";
+import {Box, Fade, Typography, useTheme} from "@mui/material";
 import {Link} from "react-router-dom";
 import {tokens} from "../../theme";
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
@@ -71,7 +71,7 @@ const Layout = () => {
                                 src={logo}
                                 style={{cursor: "pointer"}}
                             />
-                            {!collapsed && (
+                            <Fade direction="right" in={!collapsed}>
                                 <Box textAlign="center">
                                     <Typography
                                         variant="h2"
@@ -82,7 +82,7 @@ const Layout = () => {
                                         Monoskope
                                     </Typography>
                                 </Box>
-                            )}
+                            </Fade>
                         </Box>
                     </Box>
 
