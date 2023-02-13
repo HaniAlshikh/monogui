@@ -11,11 +11,6 @@ const AUTH_STATE_KEY = 'react-use-auth-state-key';
 const AUTH_RESPONSE = 'react-use-auth-response';
 const DEFAULT_EXCHANGE_CODE_FOR_TOKEN_METHOD = 'POST';
 
-const checkState = (receivedState: string) => {
-    const state = sessionStorage.getItem(AUTH_STATE_KEY);
-    return state === receivedState;
-};
-
 const AuthPopup = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -34,25 +29,19 @@ const AuthPopup = () => {
             navigate('/')
             console.error('Not a callback call');
             return
-            // throw new Error('No window opener');
         }
 
-        if (error) {
-            window.opener.postMessage({
-                type: AUTH_RESPONSE,
-                error: decodeURI(error) || 'OAuth error: An error has occured.',
-            });
-        } else if (state && checkState(state)) {
+        if (state) {
             window.opener.postMessage({
                 type: AUTH_RESPONSE,
                 payload,
             });
-        } else {
-            window.opener.postMessage({
-                type: AUTH_RESPONSE,
-                error: 'OAuth error: State mismatch.',
-            });
         }
+
+        window.opener.postMessage({
+            type: AUTH_RESPONSE,
+            error: decodeURI(error) || 'An error has occured.',
+        });
     }, []);
 
     return <Box display="flex" height={"100%"} wedith={"100%"}

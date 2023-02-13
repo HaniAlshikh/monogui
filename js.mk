@@ -7,10 +7,17 @@ js-protobuf: .protobuf-deps ## Generate neccessery client stubs
 	mkdir -p ./src/api
 	$(CURL) -fL -o m8.tar.gz "https://github.com/finleap-connect/monoskope/archive/refs/tags/v$(M8_VERSION).tar.gz"
 	tar -xf m8.tar.gz --strip-components=1 "monoskope-$(M8_VERSION)/api"
-	export PATH="$(LOCALBIN):$$PATH" ; find ./api -name '*.proto' -exec $(PROTOC) -I. -I$(PROTOC_IMPORTS_DIR) --js_out=import_style=commonjs:./src --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:./src {} \;
+	#export PATH="$(LOCALBIN):$$PATH" ; find ./api -name '*.proto' -exec $(PROTOC) -I. -I$(PROTOC_IMPORTS_DIR) --js_out=import_style=commonjs:./src --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:./src {} \;
+	export PATH="$(LOCALBIN):$(NODEBIN):$$PATH" ; find ./api -name '*.proto' -exec $(PROTOC) -I. -I$(PROTOC_IMPORTS_DIR) --es_out ./src --es_opt target=ts --connect-web_out ./src --connect-web_opt target=ts --connect-web_opt import_extension=none  {} \;
+	#export PATH="$(LOCALBIN):$(NODEBIN):$$PATH" ; find ./api -name '*.proto' -exec $(PROTOC) -I. -I$(PROTOC_IMPORTS_DIR) --ts_out ./src  {} \;
 	rm -rf m8.tar.gz
+	# TODO deal with projection and service conflict
+#	find ./build/js -name '*.ts' | xargs -I{} sed -ibak `s/_pb\.js/_pb/g' {}
+#    find ./build/js -name '*tsbak' | xargs -I{} rm -rf {}
 
 ##@ Build Dependencies
+
+NODEBIN ?= $(shell pwd)/node_modules/.bin
 
 ## Location to install dependencies to
 LOCALBIN ?= $(shell pwd)/bin

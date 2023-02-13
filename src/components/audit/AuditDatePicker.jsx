@@ -13,10 +13,7 @@ export default function AuditDatePicker(props) {
                         inputFormat="yyyy-MM-dd"
                         label="from"
                         value={props.from}
-                        onChange={(newValue) => {
-                            console.log(newValue.$d)
-                            props.onChangeFrom(newValue)
-                        }}
+                        onChange={props.onChangeFrom}
                         renderInput={(params) => <TextField {...params} />}
                     />
                 </Box>
@@ -26,10 +23,7 @@ export default function AuditDatePicker(props) {
                         inputFormat="yyyy-MM-dd"
                         label="to"
                         value={props.to}
-                        onChange={(newValue) => {
-                            console.log(newValue.$d)
-                            props.onChangeTo(newValue)
-                        }}
+                        onChange={props.onChangeTo}
                         renderInput={(params) => <TextField {...params} />}
                     />
                 </Box>
