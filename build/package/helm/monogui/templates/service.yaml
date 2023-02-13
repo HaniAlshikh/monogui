@@ -1,0 +1,20 @@
+{{- $merged := merge (deepCopy .Values) (deepCopy (default (dict) .Values.global)) -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "monogui.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "monogui.labels" . | nindent 4 }}
+    {{- with $merged.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.httpPort }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "monogui.selectorLabels" . | nindent 4 }}

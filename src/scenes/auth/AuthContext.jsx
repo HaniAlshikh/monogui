@@ -44,13 +44,14 @@ export const AuthContextProvider = (props) => {
     const loginHandler = (authInfo) => {
         setUserName(authInfo.username)
         setAccessToken(authInfo.accessToken)
-        setExpiry(authInfo.expiry)
+        // typescript to the rescue -_-
+        setExpiry(authInfo.expiry instanceof Date ? authInfo.expiry.getTime() / 1000 : authInfo.expiry)
         console.log(`logging user in: ${JSON.stringify(authInfo)}`)
         localStorage.setItem(M8_AUTH_INFO_KEY, JSON.stringify(authInfo))
     }
 
     const contextValue = {
-        hostname: "https://api.monoskope.dev:8443", // TODO config
+        hostname: import.meta.env.MONOGUI_M8_API,
         username: userName,
         accessToken: accessToken,
         expiry: expiry,

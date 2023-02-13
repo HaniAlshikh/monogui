@@ -3,6 +3,7 @@ SHELL := bash
 BUILD_PATH ?= $(shell pwd)
 
 VERSION ?= 0.0.1-local
+KUBE_NAMESPACE ?= monoskope
 LATEST_REV = $(shell git rev-list --tags --max-count=1 2>/dev/null)
 LATEST_TAG = $(shell git describe --tags $(LATEST_REV) 2>/dev/null)
 
@@ -35,3 +36,4 @@ clean: ## Clean up build dependencies
 export
 include react.mk
 include js.mk
+include helm.mk
