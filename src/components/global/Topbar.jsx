@@ -2,7 +2,7 @@ import {Box, IconButton, Typography, useTheme} from "@mui/material";
 import {useContext} from "react";
 import {tokens} from "../../theme";
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import AuthContext from "../../scenes/auth/AuthContext";
+import AuthContext from "../../scenes/auth/AuthContext.jsx";
 import ThemeButton from "./ThemeButton";
 
 const Topbar = () => {

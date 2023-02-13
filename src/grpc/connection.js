@@ -1,32 +1,48 @@
 import * as op from "../operation/operation";
+import {createGrpcWebTransport} from "@bufbuild/connect-web";
 
-export const CreateGrpcConnectionAuthenticated = (ctx, client) => {
-    return new GrpcConnectionFactory({client: client, hostname: ctx.hostname})
+export const createGrpcConnectionAuthenticated = (ctx) => {
+    return new GrpcConnectionFactory(ctx)
         .withAuth(ctx.accessToken)
         .withTimeout()
         .withRetry()
         .create()
 }
 
-class GrpcConnectionFactory {
-    client: Class
-    hostname: string
-    options: Object
+export const createGrpcConnection = (ctx) => {
+    return new GrpcConnectionFactory(ctx)
+        .withTimeout()
+        .withRetry()
+        .create()
+}
 
-    constructor({client, hostname, options}) {
-        this.client = client;
+export class GrpcConnectionFactory {
+    hostname
+    interceptors
+
+    constructor({hostname}) {
         this.hostname = hostname;
-        this.options = options;
+        this.interceptors = [];
     }
 
     create() {
-        const client = new this.client(this.hostname, null, this.options)
         if (op.getOperationMode() === op.DEVELOPMENT) {
-            const enableDevTools = window.__GRPCWEB_DEVTOOLS__ || (() => {
-            });
-            enableDevTools([client]);
+            const logger = (next) => async (req) => {
+                console.log(`gRPC Call: ${JSON.stringify(req)}`);
+                return await next(req);
+            }
+            this.interceptors.push(logger)
         }
-        return client
+        // if (op.getOperationMode() === op.DEVELOPMENT) {
+        //     const enableDevTools = window.__GRPCWEB_DEVTOOLS__ || (() => {
+        //     });
+        //     enableDevTools([client]);
+        // }
+        console.log("interceptors: " + this.interceptors)
+        return createGrpcWebTransport({
+            baseUrl: this.hostname,
+            interceptors: this.interceptors
+        });
     }
 
     withCredentials() {
@@ -34,12 +50,12 @@ class GrpcConnectionFactory {
         return this
     }
 
-    withAuth(token: string) {
-        const authInterceptor = new AuthInterceptor(token)
-        this.options = {
-            unaryInterceptors: [...(this.options?.unaryInterceptors ?? []), authInterceptor],
-            streamInterceptors: [...(this.options?.streamInterceptors ?? []), authInterceptor],
+    withAuth(token) {
+        const authenticator = (next) => async (req) => {
+            req.header.set('Authorization', `Bearer ${token}`)
+            return await next(req);
         }
+        this.interceptors.push(authenticator)
         return this
     }
 
@@ -51,19 +67,5 @@ class GrpcConnectionFactory {
     withTimeout() {
         // TODO
         return this
-    }
-}
-
-class AuthInterceptor {
-    token: string
-
-    constructor(token: string) {
-        this.token = token
-    }
-
-    intercept(request: any, invoker: any) {
-        const metadata = request.getMetadata()
-        metadata.Authorization = 'Bearer ' + this.token
-        return invoker(request)
     }
 }

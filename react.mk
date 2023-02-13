@@ -1,4 +1,4 @@
-NPM ?= npm
+NPM ?= yarn
 
 ##@ React
 
@@ -8,4 +8,4 @@ react-install: ## Install dependencies
 
 .PHONY: react-start
 react-start: ## Start development server
-	$(NPM) run start
+	$(NPM) run dev

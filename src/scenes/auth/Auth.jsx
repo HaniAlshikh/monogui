@@ -1,25 +1,21 @@
 import logo from "../../assets/m8.svg";
 import loader from "../../assets/loader.svg";
 import {Box, Button, Typography, useTheme} from "@mui/material";
-import useAuth from "../../usecases/auth/UseAuth";
 import {useContext} from "react";
-import AuthContext from "./AuthContext";
+import AuthContext from "./AuthContext.jsx";
 import {tokens} from "../../theme";
 import ThemeButton from "../../components/global/ThemeButton";
+import useAuth from "./useAuth.jsx";
 
-const Auth = (props) => {
-    const {
-        redirectUri,
-    } = props;
-
-    const authCtx = useContext(AuthContext)
+const Auth = () => {
+    const ctx = useContext(AuthContext)
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const {loading, error, getAuth} = useAuth({
-        redirectUri: redirectUri,
+        ctx: ctx,
         onSuccess: (authInfo) => {
             console.log("Authentication succeeded", authInfo)
-            authCtx.login(authInfo)
+            ctx.login(authInfo)
         },
         onError: (error_) => console.log("Authentication failed", error_)
     });
@@ -40,7 +36,7 @@ const Auth = (props) => {
                     src={logo}
                 />
 
-                {authCtx.isLoggedIn &&
+                {ctx.isLoggedIn &&
                     <Typography variant="h5" color={colors.blueAccent.default}>
                         Authentication succeeded, you will be redirected soon. If not please refresh...
                     </Typography>

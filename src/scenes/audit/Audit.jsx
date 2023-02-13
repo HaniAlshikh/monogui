@@ -1,9 +1,9 @@
 import {Box} from "@mui/material";
 import Header from "../../components/global/Header";
 import {useContext, useEffect, useState} from "react";
-import GetAuditLogUseCase from "../../usecases/audit/GetByDateRange";
+import GetAuditLogUseCase from "../../usecases/audit/get_audit_log.js";
 import AuditDatePicker from "../../components/audit/AuditDatePicker";
-import AuthContext from "../auth/AuthContext";
+import AuthContext from "../auth/AuthContext.jsx";
 import {DataGrid} from "@mui/x-data-grid";
 
 const getAuditLogUseCase = new GetAuditLogUseCase()
@@ -35,12 +35,12 @@ const Audit = () => {
         <AuditDatePicker
             from={from}
             onChangeFrom={(newFrom) => {
-                setFrom(newFrom.$d)
+                setFrom(newFrom)
                 updateTable(ctx, setData, setIsLoading)
             }}
             to={to}
             onChangeTo={(newTo) => {
-                setTo(newTo.$d)
+                setTo(newFrom)
                 updateTable(ctx, setData, setIsLoading)
             }}
         />
@@ -53,8 +53,11 @@ const Audit = () => {
 
 const updateTable = (ctx, setData, setIsLoading) => {
     setIsLoading(true)
-    setData(getAuditLogUseCase.run(ctx))
-    setIsLoading(false)
+    getAuditLogUseCase.run(ctx).then(d => {
+        console.log(d)
+        setData(d)
+        setIsLoading(false)
+    })
 }
 
 export default Audit;
