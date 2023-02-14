@@ -64,12 +64,30 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
           - name: http
-            containerPort: {{ required "A valid .Values.service.httpPort entry is required!" .Values.service.httpPort }}
+            containerPort: 80
           env:
             - name: MONOGUI_OPERATION_MODE
               value: {{ $merged.operationMode | default "release" }}
             - name: MONOGUI_M8_API
               value: {{ required "A valid .Values.monoskope.api entry is required!" .Values.monoskope.api }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            httpGet:
+              path: /index.html
+              port: 80
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            httpGet:
+              path: /index.html
+              port: 80
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

@@ -13,8 +13,8 @@ image:
   # -- Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
-# -- API address of monoskope
 monoskope:
+  # -- API address of monoskope
   api: ""
 
 podAnnotations: { }
@@ -34,7 +34,25 @@ securityContext:
 
 service:
   type: ClusterIP
-  httpPort: 3000
+
+ingress:
+  # -- Enables the ingress object.
+  enabled: false
+  # -- From Kubernetes 1.18+ this field is supported in case your ingress controller supports it. When set, you do not need to add the ingress class as annotation.
+  ingressClassName:
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: monogui.dev
+      paths:
+        - path: /
+          type: ImplementationSpecific
+
+  tls: []
+  #  - secretName: monogui-tls
+  #    hosts:
+  #      - monogui.dev
 
 resources:
   { }
@@ -48,6 +66,18 @@ resources:
 # requests:
 #   cpu: 100m
 #   memory: 128Mi
+
+livenessProbe:
+  enabled: true
+  failureThreshold: 10
+  periodSeconds: 5
+  initialDelaySeconds: 10
+
+readinessProbe:
+  enabled: true
+  failureThreshold: 5
+  periodSeconds: 5
+  initialDelaySeconds: 10
 
 autoscaling:
   enabled: false

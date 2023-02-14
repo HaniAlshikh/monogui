@@ -18,16 +18,30 @@ Monoskope GUI
 | image.repository | string | `"ghcr.io/HaniAlshikh/monogui"` |  |
 | image.tag | string | `""` | Overrides the image tag whose default is the chart appVersion. |
 | imagePullSecrets | list | `[]` |  |
+| ingress.annotations | object | `{}` |  |
+| ingress.enabled | bool | `false` | Enables the ingress object. |
+| ingress.hosts[0].host | string | `"monogui.dev"` |  |
+| ingress.hosts[0].paths[0].path | string | `"/"` |  |
+| ingress.hosts[0].paths[0].type | string | `"ImplementationSpecific"` |  |
+| ingress.ingressClassName | string | `nil` | From Kubernetes 1.18+ this field is supported in case your ingress controller supports it. When set, you do not need to add the ingress class as annotation. |
+| ingress.tls | list | `[]` |  |
 | labels | object | `{}` |  |
-| monoskope | object | `{"api":""}` | API address of monoskope |
+| livenessProbe.enabled | bool | `true` |  |
+| livenessProbe.failureThreshold | int | `10` |  |
+| livenessProbe.initialDelaySeconds | int | `10` |  |
+| livenessProbe.periodSeconds | int | `5` |  |
+| monoskope.api | string | `""` | API address of monoskope |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
 | podAnnotations | object | `{}` |  |
 | podSecurityContext | object | `{}` |  |
+| readinessProbe.enabled | bool | `true` |  |
+| readinessProbe.failureThreshold | int | `5` |  |
+| readinessProbe.initialDelaySeconds | int | `10` |  |
+| readinessProbe.periodSeconds | int | `5` |  |
 | replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
 | securityContext | object | `{}` |  |
-| service.httpPort | int | `3000` |  |
 | service.type | string | `"ClusterIP"` |  |
 | tolerations | list | `[]` |  |
 
