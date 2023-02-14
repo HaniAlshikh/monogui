@@ -1,0 +1,14 @@
+npm-debug.log
+.dockerignore
+yarn.lock
+
+**/.git
+**/.DS_Store
+**/node_modules
+**/api
+**/api_includes
+**/dist
+**/bin
+**/dev
+**/docs
+**/tmp

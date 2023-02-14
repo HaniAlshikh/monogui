@@ -1,8 +1,18 @@
 SHELL := bash
 
-BUILD_PATH ?= $(shell pwd)
+HELM ?= helm
+DOCKER ?= docker
+KIND ?= kind
+
+BUILD_PATH_TMP ?= $(shell pwd)
+BUILD_PATH = $(shell [ "$(BUILD_PATH_TMP)" = "/" ] && echo "." || echo $(BUILD_PATH_TMP))
+NODEBIN ?= $(BUILD_PATH)/node_modules/.bin
+LOCALBIN ?= $(BUILD_PATH)/bin
+$(LOCALBIN):
+	mkdir -p $(LOCALBIN)
 
 VERSION ?= 0.0.1-local
+KUBE_NAMESPACE ?= monoskope
 LATEST_REV = $(shell git rev-list --tags --max-count=1 2>/dev/null)
 LATEST_TAG = $(shell git describe --tags $(LATEST_REV) 2>/dev/null)
 
@@ -33,5 +43,6 @@ clean: ## Clean up build dependencies
 	rm -R $(LOCALBIN)
 
 export
-include react.mk
+include helm.mk
 include js.mk
+include react.mk

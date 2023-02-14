@@ -2,27 +2,29 @@ CURL ?= curl
 
 ##@ Javascript
 .PHONY: js-protobuf
-js-protobuf: .protobuf-deps ## Generate neccessery client stubs
+js-protobuf: _js-protobuf _fix-connect-web-imports ## Generate neccessery client stubs
+
+# TODO create protoc-gen-connect-web issue to adress name conflict between messages and services
+_js-protobuf: protobuf-deps ## Generate neccessery client stubs
 	rm -rf ./api ./src/api
 	mkdir -p ./src/api
 	$(CURL) -fL -o m8.tar.gz "https://github.com/finleap-connect/monoskope/archive/refs/tags/v$(M8_VERSION).tar.gz"
 	tar -xf m8.tar.gz --strip-components=1 "monoskope-$(M8_VERSION)/api"
-	#export PATH="$(LOCALBIN):$$PATH" ; find ./api -name '*.proto' -exec $(PROTOC) -I. -I$(PROTOC_IMPORTS_DIR) --js_out=import_style=commonjs:./src --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:./src {} \;
 	export PATH="$(LOCALBIN):$(NODEBIN):$$PATH" ; find ./api -name '*.proto' -exec $(PROTOC) -I. -I$(PROTOC_IMPORTS_DIR) --es_out ./src --es_opt target=ts --connect-web_out ./src --connect-web_opt target=ts --connect-web_opt import_extension=none  {} \;
-	#export PATH="$(LOCALBIN):$(NODEBIN):$$PATH" ; find ./api -name '*.proto' -exec $(PROTOC) -I. -I$(PROTOC_IMPORTS_DIR) --ts_out ./src  {} \;
 	rm -rf m8.tar.gz
-	# TODO deal with projection and service conflict
-#	find ./build/js -name '*.ts' | xargs -I{} sed -ibak `s/_pb\.js/_pb/g' {}
-#    find ./build/js -name '*tsbak' | xargs -I{} rm -rf {}
+
+_fix-connect-web-imports:
+	@sed -i.bak 's/import { User, UserRoleBinding } from ".\/projections\/user_pb"/import { User as UserProjection, UserRoleBinding } from ".\/projections\/user_pb"/' src/api/domain/queryhandler_service_connectweb.ts
+	@sed -i.bak 's/O: User,/O: UserProjection,/' src/api/domain/queryhandler_service_connectweb.ts
+	@sed -i.bak 's/import { Tenant, TenantUser } from ".\/projections\/tenant_pb"/import { Tenant as TenantProjection, TenantUser } from ".\/projections\/tenant_pb"/' src/api/domain/queryhandler_service_connectweb.ts
+	@sed -i.bak 's/O: Tenant,/O: TenantProjection,/' src/api/domain/queryhandler_service_connectweb.ts
+	@sed -i.bak 's/import { Cluster, ClusterAccess, ClusterAccessV2 } from ".\/projections\/cluster_pb"/import { Cluster as ClusterProjection, ClusterAccess as ClusterAccessProjection, ClusterAccessV2 } from ".\/projections\/cluster_pb"/' src/api/domain/queryhandler_service_connectweb.ts
+	@sed -i.bak 's/O: Cluster,/O: ClusterProjection,/' src/api/domain/queryhandler_service_connectweb.ts
+	@sed -i.bak 's/O: ClusterAccess,/O: ClusterAccessProjection,/' src/api/domain/queryhandler_service_connectweb.ts
+	@rm src/api/domain/queryhandler_service_connectweb.ts.bak
+	
 
 ##@ Build Dependencies
-
-NODEBIN ?= $(shell pwd)/node_modules/.bin
-
-## Location to install dependencies to
-LOCALBIN ?= $(shell pwd)/bin
-$(LOCALBIN):
-	mkdir -p $(LOCALBIN)
 
 ## Tool Binaries
 PROTOC ?= $(LOCALBIN)/protoc
@@ -49,12 +51,8 @@ GRPC_WEB_ARCH_OS := $(OS)-$(ARCH)
 PROTOC_IMPORTS_DIR          ?= $(BUILD_PATH)/api_includes
 PROTO_FILES                 != find api -name "*.proto"
 
-.protobuf-deps: protoc-get $(PROTO_FILES)
-	@for file in $$(find src/api/ -name "*.pb.go") ; do source=$$(awk '/^\/\/ source:/ { print $$3 }' $$file) ; echo "$$file: $$source"; done >.protobuf-deps
-	@echo -n "GENERATED_GO_FILES := " >>.protobuf-deps
-	@for file in $$(find src/api/ -name "*.pb.go") ; do echo -n " $$file"; done >>.protobuf-deps
-	@echo >>.protobuf-deps
-	
+protobuf-deps: protoc-get
+
 protoc-get $(PROTOC): $(LOCALBIN)
 	mkdir -p $(PROTOC_IMPORTS_DIR)/
 	$(CURL) -fL -o protoc.zip "https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOC_VERSION)/protoc-$(PROTOC_VERSION)-$(PROTO_ARCH_OS).zip"
@@ -62,12 +60,6 @@ protoc-get $(PROTOC): $(LOCALBIN)
 	mv -f $(LOCALBIN)/.protoc-unpack/bin/protoc $(LOCALBIN)/protoc
 	cp -a $(LOCALBIN)/.protoc-unpack/include/* $(PROTOC_IMPORTS_DIR)/
 	rm -rf $(LOCALBIN)/.protoc-unpack/ protoc.zip
-
-	$(CURL) -fL -o protobuf-javascript.zip "https://github.com/protocolbuffers/protobuf-javascript/releases/download/v$(PROTOBUF_JAVASCRIPT_VERSION)/protobuf-javascript-$(PROTOBUF_JAVASCRIPT_VERSION)-$(PROTO_ARCH_OS).zip"
-	unzip protobuf-javascript.zip -d $(LOCALBIN)/.protobuf-javascript-unpack
-	mv -f $(LOCALBIN)/.protobuf-javascript-unpack/bin/protoc-gen-js $(LOCALBIN)/protoc-gen-js
-	cp -a $(LOCALBIN)/.protobuf-javascript-unpack/google/* $(PROTOC_IMPORTS_DIR)/google/
-	rm -rf $(LOCALBIN)/.protobuf-javascript-unpack/ protobuf-javascript.zip
 	
 	$(CURL) -fL -o protoc-gen-validate.zip "https://github.com/envoyproxy/protoc-gen-validate/archive/refs/tags/v$(PROTOC_GEN_VALIDATE_VERSION).zip"
 	unzip protoc-gen-validate.zip -d $(LOCALBIN)/protoc-gen-validate-unpack
@@ -75,5 +67,5 @@ protoc-get $(PROTOC): $(LOCALBIN)
 	cp -a $(LOCALBIN)/protoc-gen-validate-unpack/protoc-gen-validate-$(PROTOC_GEN_VALIDATE_VERSION)/validate/validate.proto $(PROTOC_IMPORTS_DIR)/validate/
 	rm -rf $(LOCALBIN)/protoc-gen-validate-unpack protoc-gen-validate.zip
 
-	$(CURL) -fL -o $(LOCALBIN)/protoc-gen-grpc-web "https://github.com/grpc/grpc-web/releases/download/$(GRPC_WEB_VERSION)/protoc-gen-grpc-web-$(GRPC_WEB_VERSION)-$(GRPC_WEB_ARCH_OS)"
-	chmod +x $(LOCALBIN)/protoc-gen-grpc-web
+	npm install @bufbuild/protoc-gen-connect-web@$(cat ./package.json | jq -r '.devDependencies["@bufbuild/protoc-gen-connect-web"]') --no-save --no-package-lock
+	npm install @bufbuild/protoc-gen-es@$(cat ./package.json | jq -r '.devDependencies["@bufbuild/protoc-gen-es"]') --no-save --no-package-lock
