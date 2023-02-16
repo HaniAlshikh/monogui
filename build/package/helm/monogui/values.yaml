@@ -8,7 +8,7 @@ replicaCount: 1
 imagePullSecrets: [ ]
 
 image:
-  repository: ghcr.io/HaniAlshikh/monogui
+  repository: ghcr.io/hanialshikh/monogui/monogui
   pullPolicy: Always
   # -- Overrides the image tag whose default is the chart appVersion.
   tag: ""
