@@ -4,7 +4,7 @@ NPM ?= yarn
 
 .PHONY: react-deploy
 react-deploy: ## Build and deploy locally to k8s
-	@[ "${MONOGUI_KIND_CLUSTER_NAME}" ] || ( echo ">> '$MONOGUI_KIND_CLUSTER_NAME' (monogui testing cluster to use when loading the local image) is not set"; exit 1 )
+	@[ "${MONOGUI_KIND_CLUSTER_NAME}" ] || ( echo ">> 'MONOGUI_KIND_CLUSTER_NAME' (monogui testing cluster to use when loading the local image) is not set"; exit 1 )
 	$(DOCKER) build -f $(BUILD_PATH)/build/package/react.Dockerfile -t monogui:$(VERSION) $(BUILD_PATH)
 	$(KIND) load --name $(MONOGUI_KIND_CLUSTER_NAME) docker-image monogui:$(VERSION)
 	@$(HELM) upgrade -i monogui -n $(KUBE_NAMESPACE) --create-namespace $(HELM_PATH)/monogui --version $(VERSION) --values $(HELM_VALUES_EXAMPLE_FILE) \
