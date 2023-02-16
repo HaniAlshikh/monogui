@@ -1,6 +1,6 @@
 HELM                        ?= helm
 HELM_PATH 		              ?= build/package/helm
-HELM_VALUES_FILE            ?= build/package/helm/values.yaml
+HELM_VALUES_FILE            ?= build/package/helm/monogui/values.yaml
 HELM_VALUES_EXAMPLE_FILE    ?= build/deploy/setup/monogui.yaml
 HELM_OUTPUT_DIR             ?= tmp/helm
 HELM_REGISTRY               ?= https://alshikh.de/charts

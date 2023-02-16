@@ -3,4 +3,3 @@ monoskope:
 
 service:
   type: ClusterIP
-  httpPort: 3000

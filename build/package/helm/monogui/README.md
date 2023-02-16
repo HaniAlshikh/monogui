@@ -15,7 +15,7 @@ Monoskope GUI
 | autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"Always"` |  |
-| image.repository | string | `"ghcr.io/HaniAlshikh/monogui"` |  |
+| image.repository | string | `"ghcr.io/hanialshikh/monogui/monogui"` |  |
 | image.tag | string | `""` | Overrides the image tag whose default is the chart appVersion. |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |

@@ -1,5 +1,6 @@
 SHELL := bash
 
+YQ ?= yq
 HELM ?= helm
 DOCKER ?= docker
 KIND ?= kind

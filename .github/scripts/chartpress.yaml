@@ -7,4 +7,4 @@ charts:
     # assumed to be a separate GitHub repository.
     repo:
       git: hanialshikh/charts
-      published: https://hanialshikh.github.io/charts
+      published: https://charts.alshikh.de
