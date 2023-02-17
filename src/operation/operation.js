@@ -2,7 +2,7 @@ export const RELEASE = "release"
 export const DEVELOPMENT = "development"
 
 export const getOperationMode = () => {
-    return import.meta.env.OPERATION_MODE
+    return window._env_.MONOGUI_OPERATION_MODE
 }
 
 export const init = () => {

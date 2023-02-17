@@ -51,7 +51,7 @@ export const AuthContextProvider = (props) => {
     }
 
     const contextValue = {
-        hostname: import.meta.env.M8_API,
+        hostname: window._env_.MONOGUI_M8_API,
         username: userName,
         accessToken: accessToken,
         expiry: expiry,
