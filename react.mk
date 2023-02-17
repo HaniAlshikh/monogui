@@ -22,6 +22,7 @@ react-build: js-protobuf ## build for production
 
 .PHONY: react-start
 react-start: ## Start development server
+	@ENV_FILE_PATH=.env.local $(BUILD_PATH)/env.sh && mv $(BUILD_PATH)/env.js $(BUILD_PATH)/public/
 	$(NPM) run dev
 
 .PHONY: react-install-ci
