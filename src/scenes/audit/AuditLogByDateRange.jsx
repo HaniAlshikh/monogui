@@ -1,5 +1,4 @@
 import {Box} from "@mui/material";
-import Header from "../../components/global/Header";
 import {useContext, useEffect, useState} from "react";
 import GetAuditLogUseCase from "../../usecases/audit/get_audit_log.js";
 import AuditDatePicker from "../../components/audit/AuditDatePicker";
@@ -16,33 +15,27 @@ const columns = [
     {field: "details", headerName: "details", flex: 1},
 ];
 
-const Audit = () => {
+const AuditLogByDateRange = (auditLogOptions) => {
     const ctx = useContext(AuthContext)
-    const now = new Date();
-    const [from, setFrom] = useState(new Date(now.getFullYear(), now.getMonth(), 1));
-    const [to, setTo] = useState(new Date(now.getFullYear(), now.getMonth() + 1, 0));
-    const [data, setData] = useState([])
-    const [isLoading, setIsLoading] = useState(false)
+    const [from, setFrom] = useState(auditLogOptions.minTime);
+    const [to, setTo] = useState(auditLogOptions.maxTime);
+
     getAuditLogUseCase.auditLogOptions.minTime = from
     getAuditLogUseCase.auditLogOptions.maxTime = to
+
+    const [data, setData] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         return () => updateTable(ctx, setData, setIsLoading)
     }, [ctx, from, to])
 
-    return <Box m={3}>
-        <Header title="Audit log" subtitle="Get audit log within the specified data-range"/>
+    return <Box>
         <AuditDatePicker
             from={from}
-            onChangeFrom={(newFrom) => {
-                setFrom(newFrom)
-                updateTable(ctx, setData, setIsLoading)
-            }}
+            onChangeFrom={setFrom}
             to={to}
-            onChangeTo={(newTo) => {
-                setTo(newFrom)
-                updateTable(ctx, setData, setIsLoading)
-            }}
+            onChangeTo={setTo}
         />
         <Box mt={4} height="70vh">
             <DataGrid loading={isLoading} autoPageSize getRowId={(row) => row.key} rows={data}
@@ -60,4 +53,4 @@ const updateTable = (ctx, setData, setIsLoading) => {
     })
 }
 
-export default Audit;
+export default AuditLogByDateRange;

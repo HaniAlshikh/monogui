@@ -1,7 +1,7 @@
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import {useContext} from "react";
 import {Navigate, Route, Routes} from "react-router-dom";
-import Audit from "./scenes/audit/Audit";
+import AuditLog from "./scenes/audit/AuditLog.jsx";
 import AuthContext from "./scenes/auth/AuthContext.jsx";
 import Auth from "./scenes/auth/Auth";
 import AuthPopup from "./scenes/auth/AuthPopup.jsx";
@@ -22,7 +22,7 @@ function App() {
                     <Route path="/auth/callback" element={<AuthPopup/>}/>
                     <Route path="*" element={<Navigate to="/"/>}/>
                     <Route element={<AuthSecure/>}>
-                        <Route path="/audit" element={<Content><Audit/></Content>}/>
+                        <Route path="/audit" element={<Content><AuditLog/></Content>}/>
                     </Route>
                 </Routes>
             </ThemeProvider>
