@@ -2,7 +2,7 @@ import {Box} from "@mui/material";
 import {useContext, useEffect, useState} from "react";
 import AuditDatePicker from "../../components/audit/AuditDatePicker";
 import AuthContext from "../auth/AuthContext.jsx";
-import {DataGrid} from "@mui/x-data-grid";
+import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import GetAuditLogByUserUseCase from "../../usecases/audit/get_audit_log_by_user.js";
 import TextField from "@mui/material/TextField";
 
@@ -48,7 +48,7 @@ const AuditLogByUser = (auditLogOptions) => {
 
         <Box mt={4} height="70vh">
             <DataGrid loading={isLoading} autoPageSize getRowId={(row) => row.key} rows={data}
-                      columns={columns}/>
+                      columns={columns} components={{Toolbar: GridToolbar}}/>
         </Box>
     </Box>
 }

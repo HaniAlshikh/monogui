@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 import GetAuditLogUsersOverviewUseCase from "../../usecases/audit/get_audit_log_users_overview.js";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import {DataGrid} from "@mui/x-data-grid";
+import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import {DateTimePicker} from "@mui/x-date-pickers";
 
 const useCase = new GetAuditLogUsersOverviewUseCase()
@@ -44,7 +44,7 @@ const AuditLogUsersOverview = (auditLogOptions) => {
         </LocalizationProvider>
         <Box mt={4} height="70vh">
             <DataGrid loading={isLoading} autoPageSize getRowId={(row) => row.key} rows={data}
-                      columns={columns}/>
+                      columns={columns} components={{Toolbar: GridToolbar}}/>
         </Box>
     </Box>
 }

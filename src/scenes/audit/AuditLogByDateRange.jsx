@@ -3,7 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import GetAuditLogUseCase from "../../usecases/audit/get_audit_log.js";
 import AuditDatePicker from "../../components/audit/AuditDatePicker";
 import AuthContext from "../auth/AuthContext.jsx";
-import {DataGrid} from "@mui/x-data-grid";
+import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 
 const getAuditLogUseCase = new GetAuditLogUseCase()
 
@@ -39,7 +39,7 @@ const AuditLogByDateRange = (auditLogOptions) => {
         />
         <Box mt={4} height="70vh">
             <DataGrid loading={isLoading} autoPageSize getRowId={(row) => row.key} rows={data}
-                      columns={columns}/>
+                      columns={columns} components={{Toolbar: GridToolbar}}/>
         </Box>
     </Box>
 }
