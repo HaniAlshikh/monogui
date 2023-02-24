@@ -3,6 +3,7 @@ import {useState} from "react";
 import Header from "../../components/global/Header.jsx";
 import AuditLogByDateRange from "./AuditLogByDateRange.jsx";
 import AuditLogByUser from "./AuditLogByUser.jsx";
+import AuditLogUserActions from "./AuditLogUserActions.jsx";
 
 const auditLogOptions = {}
 
@@ -14,6 +15,10 @@ const auditLogUseCases = {
     "User": {
         description: "Get audit log about a user",
         component: AuditLogByUser,
+    },
+    "UserActions": {
+        description: "Get audit log of user actions.",
+        component: AuditLogUserActions,
     },
 }
 
@@ -40,6 +45,7 @@ const AuditLog = () => {
         {/*TODO auditLogUseCases[useCase].component(auditLogOptions)*/}
         {useCase === "Audit" && <AuditLogByDateRange {...auditLogOptions}/>}
         {useCase === "User" && <AuditLogByUser {...auditLogOptions}/>}
+        {useCase === "UserActions" && <AuditLogUserActions {...auditLogOptions}/>}
     </Box>
 }
 
