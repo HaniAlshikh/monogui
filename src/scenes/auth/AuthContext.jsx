@@ -15,17 +15,16 @@ const AuthContext = React.createContext({
     },
 })
 
-const getTimeToExpiration = (expire) => {
+const getTimeToExpiration = (expiry) => {
     const current = new Date().getTime() / 1000
-    console.log(`calculating access token expiration: ${expire} - ${current}`)
-    return expire - current // in seconds
+    return expiry - current // in seconds
 }
 
 export const AuthContextProvider = (props) => {
     let authInfo = JSON.parse(localStorage.getItem(M8_AUTH_INFO_KEY))
-    const remainingToExpire = getTimeToExpiration(authInfo?.expiry || 0)
-    console.log(`remaining for token to expire: ${remainingToExpire}`)
-    if (remainingToExpire <= 0) {
+    const remainingToExpiry = getTimeToExpiration(Number(authInfo?.expiry) || 0)
+    console.log(`remaining for token to expiry: ${remainingToExpiry}`)
+    if (remainingToExpiry <= 0) {
         authInfo = null
     }
 
@@ -44,8 +43,8 @@ export const AuthContextProvider = (props) => {
     const loginHandler = (authInfo) => {
         setUserName(authInfo.username)
         setAccessToken(authInfo.accessToken)
-        // typescript to the rescue -_-
-        setExpiry(authInfo.expiry instanceof Date ? authInfo.expiry.getTime() / 1000 : authInfo.expiry)
+        setExpiry(authInfo.expiry) // in seconds
+        authInfo.expiry = authInfo.expiry.toString() // TODO: JSON.stringify can't handle bigInt -> move to cookies should help
         console.log(`logging user in: ${JSON.stringify(authInfo)}`)
         localStorage.setItem(M8_AUTH_INFO_KEY, JSON.stringify(authInfo))
     }

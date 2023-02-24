@@ -39,8 +39,11 @@ export default class AuthUseCase extends UseCase {
                         checkState(m8Resp.state, idpResponse.state)
                         gatewayClient.requestAuthentication(idpResponse)
                             .then(authInfo => {
-                                this.onAuthenticated?.(authInfo)
-                                ctx.login(authInfo)
+                                this.onAuthenticated?.({
+                                    "accessToken": authInfo.accessToken,
+                                    "expiry": authInfo.expiry.seconds,
+                                    "username": authInfo.username,
+                                })
                             })
                     })
             })
